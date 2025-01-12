@@ -4,7 +4,7 @@ from flask_cors import CORS
 from utils import generate_chat_response
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 # Define a root route for testing the deployment
 @app.route('/')
