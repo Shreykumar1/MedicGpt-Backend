@@ -1,4 +1,4 @@
-# backend/app.py
+import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from utils import generate_chat_response
@@ -6,12 +6,14 @@ from utils import generate_chat_response
 app = Flask(__name__)
 CORS(app)
 
+# Define a root route for testing the deployment
+@app.route('/')
+def index():
+    return "Welcome to the Flask app deployed on Render!", 200
+
 @app.route('/generate-response', methods=['POST'])
 def generate_response():
     data = request.json
-    print("data", data)
-    print("data['textMessage']", data['textMessage'])
-    # text_message = data.get('textMessage', [])
     text_message = data['textMessage']
     
     try:
@@ -22,4 +24,6 @@ def generate_response():
         return jsonify({"error": str(e)}), 400
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Use the PORT environment variable or default to 5000
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)  # Disable debug mode in production
